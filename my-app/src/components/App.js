@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react"
-import logo from './logo.svg';
+import { Route, Switch } from "react-router-dom";
+// import logo from './logo.svg';
 import './App.css';
+import CaughtPokemon from "./CaughtPokemon"
+import Navbar from "./Navbar";
 
 function App() {
 
   const [allData, setAllData] = useState([])
 
   useEffect(() => {
-    fetch("http://localhost:4000/toys")
+    fetch("http://localhost:4000/pokemon")
     .then((data) => data.json())
     .then((alltoys) => setAllData(alltoys))
   }, [])
@@ -15,7 +18,8 @@ function App() {
   console.log("should have data", allData)
 
   return (
-    <div className="App">
+      <div>
+      {/* <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -29,7 +33,13 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> */}
+      <Navbar />
+        <Switch>
+          <Route exact path="/CaughtPokemon">
+            <CaughtPokemon/>
+          </Route>
+        </Switch>
     </div>
   );
 }

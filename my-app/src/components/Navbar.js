@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom"
 
 const linkStyles = {
     display: "inline-block",
-    width: "50px",
     padding: "12px",
     margin: "0 6px 6px",
     background: "blue",
@@ -16,6 +15,12 @@ function Navbar() {
         <div>
             <NavLink to="/CaughtPokemon" exact style={linkStyles} activeStyle={{ background: "darkblue" }}>
                 Caught Pokemon
+            </NavLink>
+            <NavLink to="/Home"exact style={linkStyles} activeStyle={{ background: "darkblue" }}>
+                Uncaught Pokemon
+            </NavLink>
+            <NavLink >
+                Wild Pokemon
             </NavLink>
         </div>
     )

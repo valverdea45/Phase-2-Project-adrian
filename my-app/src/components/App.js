@@ -4,6 +4,8 @@ import { Route, Switch } from "react-router-dom";
 import './App.css';
 import CaughtPokemon from "./CaughtPokemon"
 import Navbar from "./Navbar";
+import Home from "./Home"
+
 
 function App() {
 
@@ -12,7 +14,7 @@ function App() {
   useEffect(() => {
     fetch("http://localhost:4000/pokemon")
     .then((data) => data.json())
-    .then((alltoys) => setAllData(alltoys))
+    .then((allPokemon) => setAllData(allPokemon))
   }, [])
 
   console.log("should have data", allData)
@@ -38,6 +40,9 @@ function App() {
         <Switch>
           <Route exact path="/CaughtPokemon">
             <CaughtPokemon/>
+          </Route>
+          <Route exact path="/Home">
+            <Home allData={allData}/>
           </Route>
         </Switch>
     </div>

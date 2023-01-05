@@ -4,8 +4,9 @@ import { Route, Switch } from "react-router-dom";
 import './App.css';
 import CaughtPokemon from "./CaughtPokemon"
 import Navbar from "./Navbar";
-import Home from "./Home"
-
+import UncaughtPokemon from "./UncaughtPokemon"
+import WildPokemon from "./WildPokemon";
+import Home from "./Home";
 
 function App() {
 
@@ -17,7 +18,15 @@ function App() {
     .then((allPokemon) => setAllData(allPokemon))
   }, [])
 
-  console.log("should have data", allData)
+
+  const caughtPokemon = allData.filter(individualPokemon => individualPokemon.caught === true)
+
+  const uncaughtPokemon = allData.filter(individualPokemon => individualPokemon.caught === false)
+
+  
+
+  console.log("this is uncaught", uncaughtPokemon)
+  console.log("this is caught", caughtPokemon)
 
   return (
       <div>
@@ -39,10 +48,16 @@ function App() {
       <Navbar />
         <Switch>
           <Route exact path="/CaughtPokemon">
-            <CaughtPokemon/>
+            <CaughtPokemon caughtPokemon={caughtPokemon}/>
           </Route>
-          <Route exact path="/Home">
-            <Home allData={allData}/>
+          <Route exact path="/UncaughtPokemon">
+            <UncaughtPokemon uncaughtPokemon={uncaughtPokemon}/>
+          </Route>
+          <Route exact path="/WildPokemon">
+            <WildPokemon uncaughtPokemon={uncaughtPokemon}/>
+          </Route>
+          <Route exact path="/">
+            <Home />
           </Route>
         </Switch>
     </div>

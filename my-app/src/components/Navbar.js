@@ -16,10 +16,10 @@ function Navbar() {
             <NavLink to="/CaughtPokemon" exact style={linkStyles} activeStyle={{ background: "darkblue" }}>
                 Caught Pokemon
             </NavLink>
-            <NavLink to="/Home"exact style={linkStyles} activeStyle={{ background: "darkblue" }}>
+            <NavLink to="/UncaughtPokemon"exact style={linkStyles} activeStyle={{ background: "darkblue" }}>
                 Uncaught Pokemon
             </NavLink>
-            <NavLink >
+            <NavLink to="/WildPokemon" exact style={linkStyles} activeStyle={{ background: "darkblue" }}>
                 Wild Pokemon
             </NavLink>
         </div>

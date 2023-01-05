@@ -1,9 +1,17 @@
 import React from "react"
+import Pokemon from "./Pokemon"
 
-function CaughtPokemon() {
+function CaughtPokemon({ caughtPokemon }) {
+
+    const individualPokemon = caughtPokemon.map((individualPokemon) => {
+        return <Pokemon singlePokemon={individualPokemon}/>
+    })
+
     return (
         <div>
-            <h1>Welcome!</h1>
+            <h1>Caught Pokemon</h1>
+            <p>{`Total caught Pokemon ${caughtPokemon.length}.`}</p>
+            <p>{individualPokemon}</p>
         </div>
     )
 }

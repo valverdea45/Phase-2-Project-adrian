@@ -1,15 +1,9 @@
 import React from "react";
-import Pokemon from "./Pokemon";
 
-function Home({ allData }) {
-
-    const individualPokemon = allData.map((singlePokemon) => {
-        return <Pokemon singlePokemon={singlePokemon} />
-    })
-
+function Home() {
     return (
         <div>
-            {individualPokemon}
+            <h1>Welcome to your Pokedex!</h1>
         </div>
     )
 }

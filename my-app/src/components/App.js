@@ -7,23 +7,30 @@ import Navbar from "./Navbar";
 import UncaughtPokemon from "./UncaughtPokemon"
 import WildPokemon from "./WildPokemon";
 import Home from "./Home";
+import AddPokemon from "./AddPokemon"
 
 function App() {
 
-  const [allData, setAllData] = useState([])
+  const [uncaughtPokemon, setUncaughtPokemon] = useState([])
+  const [caughtPokemon, setCaughtPokemon] = useState([])
+
 
   useEffect(() => {
     fetch("http://localhost:4000/pokemon")
     .then((data) => data.json())
-    .then((allPokemon) => setAllData(allPokemon))
+    .then((allPokemon) => organizingPokemon(allPokemon))
   }, [])
 
+  function organizingPokemon(allPokemon) {
+    setCaughtPokemon(allPokemon.filter(individualPokemon => individualPokemon.caught === true))
+    setUncaughtPokemon(allPokemon.filter(individualPokemon => individualPokemon.caught === false))
+  }
+  // const caughttPokemon = allData.filter(individualPokemon => individualPokemon.caught === true)
 
-  const caughtPokemon = allData.filter(individualPokemon => individualPokemon.caught === true)
+  // const uncaughttPokemon = allData.filter(individualPokemon => individualPokemon.caught === false)
 
-  const uncaughtPokemon = allData.filter(individualPokemon => individualPokemon.caught === false)
-
-  
+  // setCaughtPokemon(caughttPokemon)
+  // setUncaughtPokemon(uncaughttPokemon)
 
   console.log("this is uncaught", uncaughtPokemon)
   console.log("this is caught", caughtPokemon)
@@ -54,7 +61,10 @@ function App() {
             <UncaughtPokemon uncaughtPokemon={uncaughtPokemon}/>
           </Route>
           <Route exact path="/WildPokemon">
-            <WildPokemon uncaughtPokemon={uncaughtPokemon}/>
+            <WildPokemon setUncaughtPokemon={setUncaughtPokemon} uncaughtPokemon={uncaughtPokemon} setCaughtPokemon={setCaughtPokemon} caughtPokemon={caughtPokemon}/>
+          </Route>
+          <Route exact path="/AddPokemon">
+            <AddPokemon uncaughtPokemon={uncaughtPokemon} setUncaughtPokemon={setUncaughtPokemon} />
           </Route>
           <Route exact path="/">
             <Home />

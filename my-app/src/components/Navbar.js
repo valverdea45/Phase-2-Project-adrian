@@ -22,6 +22,9 @@ function Navbar() {
             <NavLink to="/WildPokemon" exact style={linkStyles} activeStyle={{ background: "darkblue" }}>
                 Wild Pokemon
             </NavLink>
+            <NavLink to="/AddPokemon" exact style={linkStyles} activeStyle={{Background: "darkblue" }}>
+                Add Pokemon
+            </NavLink>
         </div>
     )
 }

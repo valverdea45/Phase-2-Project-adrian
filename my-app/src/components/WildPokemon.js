@@ -2,11 +2,13 @@ import React from "react";
 
 function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, caughtPokemon }) {
 
-    function getRandomInteger(min, max) {
+       function getRandomInteger(min, max) {
         return Math.round(Math.random() * (max - min) + min)
     }
 
-    const randomPokemon = uncaughtPokemon[getRandomInteger(0, uncaughtPokemon.length - 1)]
+    const randomPokemon = uncaughtPokemon[getRandomInteger(0, uncaughtPokemon.length - 1)] 
+
+    
 
     function handleCatch() {
         const chanceToCatch = getRandomInteger(0, 100)
@@ -18,39 +20,28 @@ function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, ca
 
         if(pokeball >= chanceToCatch) {
             return onCatch(randomPokemon)
-        } else {
-            return (
-                <p>Dang it escaped!</p>
-            )
-        }
-        
+        } 
     }
-
-    // const randomArray = [
-    //     {
-    //         id: 1,
-    //         name: "Adrian",
-    //         power: "coding"
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "Daniel",
-    //         power: "science"
-    //     },
-    //     {
-    //         id: 3,
-    //         name: "Valerie",
-    //         power: "Communication"
-    //     }
-    // ]
-
-    // console.log(randomArray)
-    // console.log(randomArray.shift(1))
 
     function onCatch(randomPokemon) {
         randomPokemon.caught = true
-        setCaughtPokemon([...caughtPokemon, randomPokemon])
-        const updatedArray = uncaughtPokemon.filter((pokemon) => pokemon.id !== randomPokemon.id);
+
+        fetch(`http://localhost:4000/pokemon/${randomPokemon.id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              caught: true
+            })    
+        })  
+        .then((data) => data.json())
+        .then((newPokemon) => handleNewPokemon(newPokemon))
+    }
+
+    function handleNewPokemon(newPokemon) {
+        setCaughtPokemon([...caughtPokemon, newPokemon])
+        const updatedArray = uncaughtPokemon.filter((pokemon) => pokemon.id !== newPokemon.id);
         setUncaughtPokemon(updatedArray)
     }
 

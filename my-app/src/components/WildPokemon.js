@@ -11,6 +11,7 @@ function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, ca
     const [pokemonCaught, setPokemonCaught] = useState(false)
     const [pokemonRan, setPokemonRan] = useState(false)
     const [showGame, setShowGame] = useState(true)
+    const [triedToRun, setTriedToRun] = useState(false)
 
     useEffect(() => {
       setPokemonIndex(getRandomInteger(0, uncaughtPokemon.length - 1))  
@@ -19,11 +20,38 @@ function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, ca
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             setPokemonCaught(false)
-        }, 1000)
+        }, 1500)
         return () => {
             clearTimeout(timeoutId)
         }
     },[pokemonCaught])
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setPokemonRan(false)
+        }, 1500)
+        return () => {
+            clearTimeout(timeoutId)
+        }
+    }, [pokemonRan])
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setShowGame(true)
+        }, 1700)
+        return () => {
+            clearTimeout(timeoutId)
+        }
+    }, [showGame])
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+           setTriedToRun(false) 
+        }, 1000);
+        return () => {
+            clearTimeout(timeoutId)
+        }
+    }, [triedToRun])
 
     let randomPokemon = uncaughtPokemon[pokemonIndex]
 
@@ -42,8 +70,11 @@ function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, ca
             console.log("chance to run away", chanceToRun)
             if(chanceToRun >= 2) {
                 setPokemonIndex(getRandomInteger(0, uncaughtPokemon.length - 1))
+                setPokemonRan(true)
+                setShowGame(false)
                 console.log("the Pokemon escaped!")
             } else {
+                setTriedToRun(true)
               console.log("The Pokemon could not escape!")  
             }
             
@@ -52,7 +83,8 @@ function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, ca
 
     function onCatch(randomPokemon) {
         randomPokemon.caught = true
-        setPokemonCaught("Pokemon Was Caught!")
+        setPokemonCaught(true)
+        setShowGame(false)
 
         fetch(`http://localhost:4000/pokemon/${randomPokemon.id}`, {
             method: "PATCH",
@@ -87,12 +119,17 @@ function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, ca
             ) : null}
             <div>
                 {pokemonCaught ? (
-                    <h1>You Caught it!!!</h1>
+                    <h1>You caught the Pokemon!</h1>
                 ) : null}
             </div>
             <div>
                 {pokemonRan ? (
-                    <h1>It Ran!!!</h1>
+                    <h1>The wild Pokemon ran away!</h1>
+                ) : null}
+            </div>
+            <div>
+                {triedToRun ? (
+                    <h1>Pokemon tried to run! but couldn't escape!</h1>
                 ) : null}
             </div>
         </div>

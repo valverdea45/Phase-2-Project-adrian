@@ -4,7 +4,7 @@ import Pokemon from "./Pokemon";
 function UncaughtPokemon({ uncaughtPokemon }) {
 
     const individualPokemon = uncaughtPokemon.map((singlePokemon) => {
-        return <Pokemon singlePokemon={singlePokemon} />
+        return <Pokemon key={singlePokemon.name} singlePokemon={singlePokemon} />
     })
 
     return (

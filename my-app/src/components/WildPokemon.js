@@ -1,30 +1,58 @@
-import React from "react"; 
+import React, { useState, useEffect } from "react";
 
 function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, caughtPokemon }) {
 
-       function getRandomInteger(min, max) {
+    function getRandomInteger(min, max) {
         return Math.round(Math.random() * (max - min) + min)
     }
+    // created state to change pokemon displayed
+    const [pokemonIndex, setPokemonIndex] = useState(0)
+    // created a state for each conditional
+    const [pokemonCaught, setPokemonCaught] = useState(false)
+    const [pokemonRan, setPokemonRan] = useState(false)
+    const [showGame, setShowGame] = useState(true)
 
-    const randomPokemon = uncaughtPokemon[getRandomInteger(0, uncaughtPokemon.length - 1)] 
+    useEffect(() => {
+      setPokemonIndex(getRandomInteger(0, uncaughtPokemon.length - 1))  
+    }, [uncaughtPokemon])
 
-    
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setPokemonCaught(false)
+        }, 1000)
+        return () => {
+            clearTimeout(timeoutId)
+        }
+    },[pokemonCaught])
+
+    let randomPokemon = uncaughtPokemon[pokemonIndex]
+
 
     function handleCatch() {
         const chanceToCatch = getRandomInteger(0, 100)
         const pokeball = getRandomInteger(0, 100)
-        console.log("chance to catch", chanceToCatch)
-        console.log("number rolled", pokeball)
+        
         console.log("was it caught?", pokeball >= chanceToCatch)
 
 
-        if(pokeball >= chanceToCatch) {
+        if (pokeball >= chanceToCatch) {
             return onCatch(randomPokemon)
-        } 
+        } else {
+            const chanceToRun = getRandomInteger(0, 5)
+            console.log("chance to run away", chanceToRun)
+            if(chanceToRun >= 2) {
+                setPokemonIndex(getRandomInteger(0, uncaughtPokemon.length - 1))
+                console.log("the Pokemon escaped!")
+            } else {
+              console.log("The Pokemon could not escape!")  
+            }
+            
+        }
     }
 
     function onCatch(randomPokemon) {
         randomPokemon.caught = true
+        setPokemonCaught("Pokemon Was Caught!")
 
         fetch(`http://localhost:4000/pokemon/${randomPokemon.id}`, {
             method: "PATCH",
@@ -32,11 +60,11 @@ function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, ca
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              caught: true
-            })    
-        })  
-        .then((data) => data.json())
-        .then((newPokemon) => handleNewPokemon(newPokemon))
+                caught: true
+            })
+        })
+            .then((data) => data.json())
+            .then((newPokemon) => handleNewPokemon(newPokemon))
     }
 
     function handleNewPokemon(newPokemon) {
@@ -47,12 +75,26 @@ function WildPokemon({ setUncaughtPokemon, uncaughtPokemon, setCaughtPokemon, ca
 
     return (
         <div>
+            {showGame ? (
+               <div>
             <h2>{`Woah a wild ${randomPokemon.name} appeared!`}</h2>
             <p>{randomPokemon.name}</p>
             <p>{randomPokemon.hp}</p>
             <img src={randomPokemon.sprites.front} alt={""} />
-            <br/>
-            <btn onClick={handleCatch}>Catch It!</btn>
+            <br />
+            <button onClick={handleCatch}>Catch It!</button>
+            </div> 
+            ) : null}
+            <div>
+                {pokemonCaught ? (
+                    <h1>You Caught it!!!</h1>
+                ) : null}
+            </div>
+            <div>
+                {pokemonRan ? (
+                    <h1>It Ran!!!</h1>
+                ) : null}
+            </div>
         </div>
     )
 }
